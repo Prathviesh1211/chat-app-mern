@@ -5,7 +5,7 @@ import cloudinary from "../lib/cloudinary.js"
 export const getUserForSidebar=async(req,res)=>{
     try{
         const loggedInUser=req.user._id;
-        const filteredUsers=await User.find({id:{$ne:{loggedInUser}}}).select("-password");
+        const filteredUsers=await User.find({_id:{$ne:{loggedInUser}}}).select("-password");
         res.status(200).json(filteredUsers);
     }catch(error){
         console.error("Error in getUserForSidebar controller :",error.message);
@@ -23,7 +23,7 @@ export const getMessages=async(req,res)=>{
                 {senderId:myId,receiverId:userToChatId},
                 {senderId:userToChatId,receiverId:myId}
             ]
-        });
+        }).sort({ createdAt: 1 });
 
         res.status(200).json(messages);
     }catch(error){
@@ -45,8 +45,8 @@ export const sendMessage=async(req,res)=>{
         }
     
         const newMessage=new Message({
-            senderId,
-            receiverId,
+            senderId:myId,
+            receiverId:userToChatId,
             text,
             image:imageUrl
         })
