@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+git commit -m "Stop tracking node_modules and .env"
+git push
